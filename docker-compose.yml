@@ -20,6 +20,8 @@ services:
       - POSTGRES_DB=airflow
     ports:
       - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
   init:
     image: *airflow_image
     depends_on:
@@ -38,6 +40,8 @@ services:
       - logs:/opt/airflow/logs
     environment: *airflow_environment
     command: webserver
+    env_file:
+      - .env
   scheduler:
     image: *airflow_image
     restart: always
@@ -48,6 +52,9 @@ services:
       - logs:/opt/airflow/logs
     environment: *airflow_environment
     command: scheduler
+    env_file:
+      - .env
 
 volumes:
   logs:
+  db-data:
